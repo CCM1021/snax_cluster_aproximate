@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="sbt 1" modules="chisel_acc_2907" />
+    <profile name="sbt 2" modules="snax-accelerators">
+      <option name="reflectiveCalls" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-Xcheckinit" />
+        <parameter value="-Ymacro-annotations" />
+        <parameter value="-P:chiselplugin:genBundleElements" />
+      </parameters>
+      <plugins>
+        <plugin path="C:\Users\Carlos Cerdas Mora\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\chipsalliance\chisel-plugin_2.13.14\6.4.0\chisel-plugin_2.13.14-6.4.0.jar" />
+      </plugins>
+    </profile>
+  </component>
+</project>
