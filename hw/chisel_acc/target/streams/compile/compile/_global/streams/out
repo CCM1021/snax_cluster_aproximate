@@ -1,5 +1,1 @@
 [0m[[0m[33mwarn[0m] [0m[0m'genBundleElements' is now default behavior, you can remove the scalacOption.[0m
-[0m[[0m[33mwarn[0m] [0m[0m/home/carlosc/snax_cluster_aproximate/hw/chisel_acc/src/main/scala/snax_acc/gemm_simd/BlockGemmRescaleSIMD.scala:55:15: unreachable code[0m
-[0m[[0m[33mwarn[0m] [0m[0m    case _ => throw new Exception("Unknown SIMD configuration")[0m
-[0m[[0m[33mwarn[0m] [0m[0m              ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mone warning found[0m

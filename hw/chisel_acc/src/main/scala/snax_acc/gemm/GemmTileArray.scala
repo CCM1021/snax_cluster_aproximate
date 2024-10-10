@@ -89,10 +89,6 @@ class Tile(params: GemmParams) extends Module with RequireAsyncReset {
   val desp_a = (io.data_a_i.head.getWidth / 2).U// Obtener la anchura de un dato y dividirla entre 2, luego convertir a UInt
   val desp_b = (io.data_b_i.head.getWidth / 2).U // Mismo proceso para data_b
 
-  // Debugging (imprimir valores si es necesario)
-  println("Desplazamiento A: " + desp_a)
-  println("Desplazamiento B: " + desp_b)
-
   for (i <- 0 until params.tileSize) {
     // Desplazar a la derecha para conservar solo los bits más significativos
     val data_a_approx = (data_a_i_subtracted(i) >> desp_a).asUInt
