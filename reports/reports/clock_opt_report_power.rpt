@@ -1,0 +1,102 @@
+****************************************
+Report : power
+        -significant_digits 2
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Tue Oct 15 01:53:27 2024
+****************************************
+Information: The stitching and editing of coupling caps is turned OFF for design 'BlockGemm_lib:BlockGemm/clock_opt.design'. (TIM-125)
+Information: Design BlockGemm has 105745 nets, 0 global routed, 107 detail routed. (NEX-024)
+Information: The RC mode used is CTO for design 'BlockGemm'. (NEX-022)
+Information: Design Average RC for design BlockGemm  (NEX-011)
+Information: r = 1.148613 ohm/um, via_r = 1.815407 ohm/cut, c = 0.229768 ff/um, cc = 0.000000 ff/um (X dir) (NEX-017)
+Information: r = 0.922588 ohm/um, via_r = 1.815407 ohm/cut, c = 0.199949 ff/um, cc = 0.000000 ff/um (Y dir) (NEX-017)
+Information: Update timing completed net estimation for all the timing graph nets (TIM-111)
+Information: Net estimation statistics: timing graph nets = 105743, routed nets = 107, across physical hierarchy nets = 0, parasitics cached nets = 105743, delay annotated nets = 0, parasitics annotated nets = 0, multi-voltage nets = 0. (TIM-112)
+Mode: mode1
+Corner: cornerFF
+Scenario: scenarioFF
+Voltage: 1.32
+Temperature: 125.00
+
+Voltage Unit         : 1V
+Capacitance Unit     : 1pF
+Time Unit            : 1ns
+Temperature Unit     : 1C
+Dynamic Power Unit   : 1nW
+Leakage Power Unit   : 1nW
+
+Switched supply net power scaling:
+scaling for leakage power
+
+Supply nets:
+VDD (power) probability 1.00 (default)
+VSS (ground) probability 1.00 (default)
+
+  Cell Internal Power    = 3.60e+07 nW ( 64.9%)
+  Net Switching Power    = 1.95e+07 nW ( 35.1%)
+Total Dynamic Power      = 5.55e+07 nW (100.0%)
+
+Cell Leakage Power       = 2.36e+07 nW
+
+
+  Attributes
+  ----------
+      u  -  User defined power group
+      i  -  Includes clock pin internal power
+
+Power Group         Internal Power        Switching Power          Leakage Power            Total Power    (   %  )    Attrs
+-----------------------------------------------------------------------------------------------------------------------------
+io_pad                    0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+memory                    0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+black_box                 0.00e+00               0.00e+00               2.51e+02               2.51e+02    (  0.0%)         
+clock_network             8.53e+05               5.42e+05               4.02e+04               1.44e+06    (  1.8%)        i
+register                  3.45e+05               7.83e+05               8.08e+05               1.94e+06    (  2.4%)         
+sequential                0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+combinational             3.48e+07               1.82e+07               2.28e+07               7.58e+07    ( 95.7%)         
+-----------------------------------------------------------------------------------------------------------------------------
+Total                     3.60e+07 nW            1.95e+07 nW            2.36e+07 nW            7.91e+07 nW
+Mode: mode1
+Corner: cornerSS
+Scenario: scenarioSS
+Voltage: 1.08
+Temperature: 125.00
+
+Voltage Unit         : 1V
+Capacitance Unit     : 1pF
+Time Unit            : 1ns
+Temperature Unit     : 1C
+Dynamic Power Unit   : 1nW
+Leakage Power Unit   : 1nW
+
+Switched supply net power scaling:
+scaling for leakage power
+
+Supply nets:
+VDD (power) probability 1.00 (default)
+VSS (ground) probability 1.00 (default)
+
+  Cell Internal Power    = 2.02e+07 nW ( 60.1%)
+  Net Switching Power    = 1.34e+07 nW ( 39.9%)
+Total Dynamic Power      = 3.36e+07 nW (100.0%)
+
+Cell Leakage Power       = 3.03e+05 nW
+
+
+  Attributes
+  ----------
+      u  -  User defined power group
+      i  -  Includes clock pin internal power
+
+Power Group         Internal Power        Switching Power          Leakage Power            Total Power    (   %  )    Attrs
+-----------------------------------------------------------------------------------------------------------------------------
+io_pad                    0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+memory                    0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+black_box                 0.00e+00               0.00e+00               1.41e+01               1.41e+01    (  0.0%)         
+clock_network             4.26e+05               3.85e+05               5.70e+02               8.12e+05    (  2.4%)        i
+register                  1.89e+05               5.41e+05               1.02e+04               7.40e+05    (  2.2%)         
+sequential                0.00e+00               0.00e+00               0.00e+00               0.00e+00    (  0.0%)         
+combinational             1.96e+07               1.25e+07               2.92e+05               3.23e+07    ( 95.4%)         
+-----------------------------------------------------------------------------------------------------------------------------
+Total                     2.02e+07 nW            1.34e+07 nW            3.03e+05 nW            3.39e+07 nW
+1

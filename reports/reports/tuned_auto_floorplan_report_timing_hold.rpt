@@ -1,0 +1,52 @@
+Warning: Scenario scenarioSS is not configured for hold analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type min
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Mon Oct 14 01:33:27 2024
+****************************************
+
+  Startpoint: compute_fire_counter_reg[12] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Endpoint: gemm_array/mesh/mesh_7_6/accumulation_reg_reg[5] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerFF
+  Scenario: scenarioFF
+  Path Group: SYS_CLK
+  Path Type: min
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+
+  compute_fire_counter_reg[12]/CP (SDFCND0HPBWP)   0.00      0.00 r
+  compute_fire_counter_reg[12]/Q (SDFCND0HPBWP)    0.14      0.14 r
+  ctmi_8275/ZN (NR4D0HPBWP)                        0.03      0.17 f
+  ctmi_93465/Z (AN4D1HPBWP)                        0.05      0.22 f
+  ctmi_93466/ZN (INVD1HPBWP)                       0.06      0.28 r
+  gemm_array/mesh/ctmi_87779/Z (AN2D8HPBWP)      321.14    321.42 r
+  gemm_array/mesh/ctmi_108143/Z (OR2D8HPBWP)     -6826.32  
+                                                           -6504.90 r
+  gemm_array/mesh/ctmi_2948/Z (AO22D0HPBWP)        0.04    -6504.86 r
+  gemm_array/mesh/mesh_7_6/accumulation_reg_reg[5]/D (SDFCNQD2HPBWP)
+                                                   0.00    -6504.86 r
+  data arrival time                                        -6504.86
+
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+  gemm_array/mesh/mesh_7_6/accumulation_reg_reg[5]/CP (SDFCNQD2HPBWP)
+                                                   0.00      0.00 r
+  library hold time                               -0.02     -0.02
+  data required time                                        -0.02
+  ------------------------------------------------------------------------
+  data required time                                        -0.02
+  data arrival time                                        6504.86
+  ------------------------------------------------------------------------
+  slack (VIOLATED)                                         -6504.83
+
+
+1

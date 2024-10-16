@@ -1,0 +1,48 @@
+Warning: Scenario scenarioSS is not configured for hold analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type min
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Mon Oct 14 23:27:03 2024
+****************************************
+
+  Startpoint: d_output_ifvalid_counter_reg[1] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Endpoint: d_output_ifvalid_counter_reg[1] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerFF
+  Scenario: scenarioFF
+  Path Group: SYS_CLK
+  Path Type: min
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+
+  d_output_ifvalid_counter_reg[1]/CP (SDFCND0HPBWP)
+                                                   0.00      0.00 r
+  d_output_ifvalid_counter_reg[1]/Q (SDFCND0HPBWP)
+                                                   0.13      0.13 r
+  ctmi_792/ZN (NR2D0HPBWP)                         0.02      0.15 f
+  d_output_ifvalid_counter_reg[1]/D (SDFCND0HPBWP)
+                                                   0.00      0.15 f
+  data arrival time                                          0.15
+
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+  d_output_ifvalid_counter_reg[1]/CP (SDFCND0HPBWP)
+                                                   0.00      0.00 r
+  library hold time                                0.01      0.01
+  data required time                                         0.01
+  ------------------------------------------------------------------------
+  data required time                                         0.01
+  data arrival time                                         -0.15
+  ------------------------------------------------------------------------
+  slack (MET)                                                0.14
+
+
+1

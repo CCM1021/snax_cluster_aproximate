@@ -1,0 +1,58 @@
+Warning: Scenario scenarioFF is not configured for setup analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type max
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Mon Oct 14 01:33:27 2024
+****************************************
+
+  Startpoint: compute_fire_counter_reg[0] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Endpoint: gemm_array/mesh/mesh_5_2/accumulation_reg_reg[31] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerSS
+  Scenario: scenarioSS
+  Path Group: SYS_CLK
+  Path Type: max
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+
+  compute_fire_counter_reg[0]/CP (SDFCND0HPBWP)    0.00      0.00 r
+  compute_fire_counter_reg[0]/QN (SDFCND0HPBWP)    0.43      0.43 r
+  ctmi_8261/ZN (OAI221D0HPBWP)                     0.15      0.58 f
+  ctmi_8257/ZN (AOI211XD0HPBWP)                    0.14      0.72 r
+  ctmi_8252/ZN (ND4D1HPBWP)                        0.12      0.84 f
+  ctmi_8241/ZN (NR4D0HPBWP)                        0.15      0.99 r
+  ctmi_8204/ZN (ND4D1HPBWP)                        0.21      1.20 f
+  ctmi_8202/ZN (NR2XD0HPBWP)                       0.13      1.34 r
+  ctmi_8200/ZN (AOI32D1HPBWP)                      0.10      1.43 f
+  ctmi_8199/ZN (NR2XD0HPBWP)                       0.13      1.57 r
+  gemm_array/mesh/ctmi_108129/ZN (ND2D1HPBWP)      0.17      1.73 f
+  gemm_array/mesh/ctmi_87780/Z (AN3D8HPBWP)      421.30    423.03 f
+  gemm_array/mesh/ctmi_108143/Z (OR2D8HPBWP)     2758.94   3181.97 f
+  gemm_array/mesh/ctmi_2623/Z (AO22D0HPBWP)        0.11    3182.08 f
+  gemm_array/mesh/mesh_5_2/accumulation_reg_reg[31]/D (SDFCNQD0HPBWP)
+                                                   0.00    3182.08 f
+  data arrival time                                        3182.08
+
+  clock SYS_CLK (rise edge)                       10.00     10.00
+  clock network delay (ideal)                      0.00     10.00
+  gemm_array/mesh/mesh_5_2/accumulation_reg_reg[31]/CP (SDFCNQD0HPBWP)
+                                                   0.00     10.00 r
+  clock uncertainty                               -0.30      9.70
+  library setup time                              -5.21      4.49
+  data required time                                         4.49
+  ------------------------------------------------------------------------
+  data required time                                         4.49
+  data arrival time                                        -3182.08
+  ------------------------------------------------------------------------
+  slack (VIOLATED)                                         -3177.59
+
+
+1

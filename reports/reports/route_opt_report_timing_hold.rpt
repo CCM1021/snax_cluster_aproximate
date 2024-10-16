@@ -1,0 +1,54 @@
+Warning: Scenario scenarioSS is not configured for hold analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type min
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Tue Oct 15 11:32:37 2024
+****************************************
+
+  Startpoint: gemm_array/mesh/mesh_0_1/add_c_fire_reg_reg (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Endpoint: needs_add_c_reg (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerFF
+  Scenario: scenarioFF
+  Path Group: SYS_CLK
+  Path Type: min
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (propagated)                 0.30      0.30
+
+  gemm_array/mesh/mesh_0_1/add_c_fire_reg_reg/CP (SDFCNQD0HPBWP)
+                                                   0.00      0.30 r
+  gemm_array/mesh/mesh_0_1/add_c_fire_reg_reg/Q (SDFCNQD0HPBWP)
+                                                   0.13      0.43 f
+  gemm_array/mesh/ctmi_108137/ZN (NR3D0HPBWP)      0.05      0.48 r
+  gemm_array/mesh/ctmi_4773/ZN (CKND0HPBWP)        0.04      0.52 f
+  ctmi_6902/ZN (CKND2D1HPBWP)                      0.04      0.56 r
+  ctmi_113670/Z (OR2D0HPBWP)                       0.10      0.66 r
+  ctmi_6971/ZN (AOI21D0HPBWP)                      0.06      0.72 f
+  place_optcopt_h_inst_172976/Z (CKBD0HPBWP)       0.05      0.77 f
+  place_optcopt_h_inst_172977/Z (CKBD0HPBWP)       0.04      0.81 f
+  place_optropt_h_inst_179143/Z (CKBD0HPBWP)       0.03      0.84 f
+  place_optropt_h_inst_179144/Z (CKBD0HPBWP)       0.04      0.87 f
+  needs_add_c_reg/D (SDFSND0HPBWP)                 0.00      0.87 f
+  data arrival time                                          0.87
+
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (propagated)                 0.84      0.84
+  needs_add_c_reg/CP (SDFSND0HPBWP)                0.00      0.84 r
+  library hold time                                0.02      0.86
+  data required time                                         0.86
+  ------------------------------------------------------------------------
+  data required time                                         0.86
+  data arrival time                                         -0.87
+  ------------------------------------------------------------------------
+  slack (MET)                                                0.01
+
+
+1

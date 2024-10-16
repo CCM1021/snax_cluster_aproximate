@@ -1,0 +1,23 @@
+****************************************
+Report : area
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Tue Oct 15 13:00:11 2024
+****************************************
+
+Number of ports:                        10486
+Number of nets:                        109874
+Number of cells:                        71742
+Number of combinational cells:          69391
+Number of sequential cells:              2351
+Number of macros/black boxes:               0
+Number of buf/inv:                       9344
+Number of references:                     193
+
+Combinational area:                 443101.60
+Buf/Inv area:                        18011.20
+Noncombinational area:               29238.40
+Macro/Black Box area:                    0.00
+
+Total cell area:                    472340.00
+1

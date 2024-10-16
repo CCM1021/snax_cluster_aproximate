@@ -1,0 +1,108 @@
+Warning: Scenario scenarioFF is not configured for setup analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type max
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Tue Oct 15 13:00:11 2024
+****************************************
+
+  Startpoint: d_output_counter_reg[1] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Endpoint: d_output_counter_reg[63] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerSS
+  Scenario: scenarioSS
+  Path Group: SYS_CLK
+  Path Type: max
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (propagated)                 1.45      1.45
+
+  d_output_counter_reg[1]/CP (SDFCNQD0HPBWP)       0.00      1.45 r
+  d_output_counter_reg[1]/Q (SDFCNQD0HPBWP)        0.35      1.80 r
+  place_optctmTdsLR_1_98453/Z (AN2D0HPBWP)         0.17      1.97 r
+  place_optctmTdsLR_1_98450/Z (AN2D1HPBWP)         0.14      2.10 r
+  place_optctmTdsLR_1_98447/Z (AN2D0HPBWP)         0.14      2.24 r
+  place_optctmTdsLR_2_98152/Z (AN2D1HPBWP)         0.13      2.37 r
+  place_optctmTdsLR_3_98153/Z (AN2D1HPBWP)         0.13      2.50 r
+  place_optctmTdsLR_1_98440/Z (AN2D0HPBWP)         0.14      2.64 r
+  place_optctmTdsLR_1_98437/Z (AN2D1HPBWP)         0.13      2.77 r
+  place_optctmTdsLR_1_98434/Z (AN2D1HPBWP)         0.13      2.90 r
+  place_optctmTdsLR_1_98431/Z (AN2D1HPBWP)         0.13      3.03 r
+  place_optctmTdsLR_1_98428/Z (AN2D1HPBWP)         0.13      3.16 r
+  place_optctmTdsLR_1_98425/Z (AN2D1HPBWP)         0.13      3.30 r
+  place_optctmTdsLR_1_98422/Z (AN2D0HPBWP)         0.14      3.44 r
+  place_optctmTdsLR_1_98419/Z (AN2D1HPBWP)         0.14      3.58 r
+  place_optctmTdsLR_1_98416/Z (AN2D0HPBWP)         0.15      3.74 r
+  place_optctmTdsLR_1_98413/Z (AN2D1HPBWP)         0.15      3.88 r
+  place_optctmTdsLR_2_98148/Z (AN2D0HPBWP)         0.15      4.03 r
+  place_optctmTdsLR_3_98149/Z (AN2D1HPBWP)         0.14      4.18 r
+  place_optctmTdsLR_1_98406/Z (CKAN2D0HPBWP)       0.16      4.33 r
+  place_optctmTdsLR_1_98403/Z (AN2D1HPBWP)         0.13      4.47 r
+  place_optctmTdsLR_1_98400/Z (AN2D0HPBWP)         0.15      4.61 r
+  place_optctmTdsLR_1_98397/Z (AN2D1HPBWP)         0.16      4.77 r
+  place_optctmTdsLR_1_98394/Z (AN2D1HPBWP)         0.14      4.92 r
+  place_optctmTdsLR_1_98391/Z (AN2D0HPBWP)         0.14      5.06 r
+  place_optctmTdsLR_1_98388/Z (AN2D1HPBWP)         0.14      5.19 r
+  place_optctmTdsLR_1_98385/Z (AN2D0HPBWP)         0.15      5.34 r
+  place_optctmTdsLR_1_98382/Z (AN2D1HPBWP)         0.15      5.49 r
+  place_optctmTdsLR_1_98379/Z (AN2D0HPBWP)         0.15      5.64 r
+  place_optctmTdsLR_2_98129/ZN (ND2D1HPBWP)        0.08      5.72 f
+  place_optctmTdsLR_1_111059/ZN (INR2XD0HPBWP)     0.10      5.82 r
+  place_optctmTdsLR_1_98372/Z (AN2D1HPBWP)         0.14      5.96 r
+  place_optctmTdsLR_1_98369/Z (AN2D0HPBWP)         0.13      6.09 r
+  place_optctmTdsLR_1_98366/Z (AN2D0HPBWP)         0.14      6.23 r
+  place_optctmTdsLR_1_98363/Z (AN2D0HPBWP)         0.14      6.37 r
+  place_optctmTdsLR_1_98360/Z (AN2D0HPBWP)         0.14      6.51 r
+  place_optctmTdsLR_1_98357/Z (AN2D0HPBWP)         0.14      6.66 r
+  place_optctmTdsLR_1_98354/Z (AN2D0HPBWP)         0.14      6.80 r
+  place_optctmTdsLR_1_98351/Z (AN2D1HPBWP)         0.13      6.92 r
+  place_optctmTdsLR_1_98348/Z (CKAN2D0HPBWP)       0.15      7.08 r
+  place_optctmTdsLR_1_98345/Z (AN2D1HPBWP)         0.13      7.20 r
+  place_optctmTdsLR_2_98117/ZN (ND2D1HPBWP)        0.09      7.29 f
+  place_optctmTdsLR_1_111207/ZN (INR2XD0HPBWP)     0.13      7.42 r
+  place_optctmTdsLR_1_98338/Z (CKAN2D0HPBWP)       0.20      7.62 r
+  place_optctmTdsLR_1_98335/Z (CKAN2D0HPBWP)       0.18      7.80 r
+  place_optctmTdsLR_1_98332/Z (CKAN2D0HPBWP)       0.17      7.97 r
+  place_optctmTdsLR_1_98329/Z (CKAN2D0HPBWP)       0.18      8.16 r
+  place_optctmTdsLR_1_98326/Z (CKAN2D0HPBWP)       0.17      8.33 r
+  place_optctmTdsLR_1_98323/Z (CKAN2D0HPBWP)       0.16      8.49 r
+  place_optctmTdsLR_1_98320/Z (CKAN2D0HPBWP)       0.17      8.66 r
+  place_optctmTdsLR_1_98317/Z (CKAN2D0HPBWP)       0.17      8.83 r
+  place_optctmTdsLR_1_98314/Z (CKAN2D0HPBWP)       0.17      9.00 r
+  place_optctmTdsLR_1_98311/Z (CKAN2D0HPBWP)       0.17      9.17 r
+  place_optctmTdsLR_2_98106/Z (CKAN2D0HPBWP)       0.17      9.34 r
+  place_optctmTdsLR_3_98107/Z (CKAN2D0HPBWP)       0.16      9.50 r
+  place_optctmTdsLR_1_98304/Z (CKAN2D0HPBWP)       0.17      9.67 r
+  place_optctmTdsLR_1_98301/Z (CKAN2D0HPBWP)       0.18      9.85 r
+  place_optctmTdsLR_1_98298/Z (CKAN2D0HPBWP)       0.18     10.03 r
+  place_optctmTdsLR_1_98295/Z (CKAN2D0HPBWP)       0.17     10.21 r
+  place_optctmTdsLR_1_98292/Z (CKAN2D0HPBWP)       0.17     10.38 r
+  place_optctmTdsLR_1_98289/Z (CKAN2D0HPBWP)       0.17     10.54 r
+  place_optctmTdsLR_1_98286/Z (CKAN2D0HPBWP)       0.17     10.71 r
+  place_optctmTdsLR_1_98283/Z (CKAN2D0HPBWP)       0.16     10.87 r
+  place_optctmTdsLR_1_108643/ZN (CKND2D0HPBWP)     0.12     10.99 f
+  place_optctmTdsLR_2_108644/ZN (IAO22D0HPBWP)     0.14     11.13 f
+  place_optctmTdsLR_2_98279/ZN (NR2D0HPBWP)        0.10     11.22 r
+  d_output_counter_reg[63]/D (SDFCNQD0HPBWP)       0.00     11.22 r
+  data arrival time                                         11.22
+
+  clock SYS_CLK (rise edge)                       10.00     10.00
+  clock network delay (propagated)                 1.25     11.25
+  d_output_counter_reg[63]/CP (SDFCNQD0HPBWP)      0.00     11.25 r
+  clock uncertainty                               -0.30     10.95
+  library setup time                              -0.08     10.87
+  data required time                                        10.87
+  ------------------------------------------------------------------------
+  data required time                                        10.87
+  data arrival time                                        -11.22
+  ------------------------------------------------------------------------
+  slack (VIOLATED)                                          -0.35
+
+
+1

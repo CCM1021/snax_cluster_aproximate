@@ -1,0 +1,122 @@
+Warning: Scenario scenarioFF is not configured for setup analysis: skipping. (UIC-058)
+****************************************
+Report : timing
+        -path_type full
+        -delay_type max
+        -max_paths 1
+        -report_by design
+Design : BlockGemm
+Version: U-2022.12-SP6
+Date   : Mon Oct 14 23:27:03 2024
+****************************************
+
+  Startpoint: io_data_a_i_bits[64] (input port clocked by SYS_CLK)
+  Endpoint: gemm_array/mesh/mesh_1_6/accumulation_reg_reg[31] (rising edge-triggered flip-flop clocked by SYS_CLK)
+  Mode: mode1
+  Corner: cornerSS
+  Scenario: scenarioSS
+  Path Group: **in2reg_default**
+  Path Type: max
+
+  Point                                            Incr      Path  
+  ------------------------------------------------------------------------
+  clock SYS_CLK (rise edge)                        0.00      0.00
+  clock network delay (ideal)                      0.00      0.00
+  input external delay                             0.80      0.80 r
+  io_data_a_i_bits[64] (in)                        0.00      0.80 r
+  gemm_array/mesh/snps_ADD_4304/ctmi_163702/ZN (INR2XD0HPBWP)
+                                                   0.04      0.84 f
+  gemm_array/mesh/snps_ADD_4304/ctmi_163701/ZN (MAOI222D1HPBWP)
+                                                   0.12      0.96 r
+  gemm_array/mesh/snps_ADD_4304/ctmi_163700/ZN (MAOI222D1HPBWP)
+                                                   0.12      1.08 f
+  gemm_array/mesh/snps_ADD_4304/ctmi_163698/ZN (MAOI222D2HPBWP)
+                                                   0.30      1.39 r
+  gemm_array/mesh/snps_ADD_4304/U_40/CO (FA1D1HPBWP)
+                                                   0.23      1.62 r
+  gemm_array/mesh/snps_ADD_4304/U_42/CO (FA1D2HPBWP)
+                                                   0.26      1.88 r
+  gemm_array/mesh/place_optctmTdsLR_4_123370/CO (FCICIND2HPBWP)
+                                                   0.39      2.27 r
+  gemm_array/mesh/place_optctmTdsLR_7_123373/ZN (XNR2D0HPBWP)
+                                                   0.50      2.77 r
+  gemm_array/mesh/place_optZBUF_1189_inst_126999/Z (BUFFD4HPBWP)
+                                                   0.43      3.20 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/ctmi_15806/ZN (NR2D0HPBWP)
+                                                   0.23      3.43 f
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_813/S (CMPE42D1HPBWP)
+                                                   0.36      3.79 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_817/S (CMPE42D1HPBWP)
+                                                   0.47      4.26 f
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_819/S (CMPE42D1HPBWP)
+                                                   0.37      4.63 f
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1119/S (FA1D1HPBWP)
+                                                   0.52      5.15 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/ctmi_16474/Z (AO22D0HPBWP)
+                                                   0.29      5.44 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1222/CO (FA1D0HPBWP)
+                                                   0.21      5.65 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1225/CO (FA1D0HPBWP)
+                                                   0.12      5.77 r
+  gemm_array/mesh/place_optHFSBUF_2_119291/Z (BUFFD1HPBWP)
+                                                   0.33      6.10 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1227/CO (FA1D0HPBWP)
+                                                   0.27      6.37 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1230/CO (FA1D0HPBWP)
+                                                   0.16      6.53 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1232/CO (FA1D0HPBWP)
+                                                   0.15      6.68 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1235/CO (FA1D0HPBWP)
+                                                   0.19      6.87 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1237/CO (FA1D0HPBWP)
+                                                   0.19      7.06 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1240/CO (FA1D0HPBWP)
+                                                   0.15      7.22 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1242/CO (FA1D0HPBWP)
+                                                   0.13      7.34 r
+  gemm_array/mesh/place_optHFSBUF_2_123621/Z (BUFFD1HPBWP)
+                                                   0.24      7.58 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1245/CO (FA1D0HPBWP)
+                                                   0.22      7.80 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1247/CO (FA1D0HPBWP)
+                                                   0.14      7.94 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1250/CO (FA1D0HPBWP)
+                                                   0.14      8.08 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1252/CO (FA1D0HPBWP)
+                                                   0.15      8.22 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1255/CO (FA1D0HPBWP)
+                                                   0.14      8.37 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1257/CO (FA1D0HPBWP)
+                                                   0.15      8.51 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1260/CO (FA1D0HPBWP)
+                                                   0.17      8.68 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1262/CO (FA1D0HPBWP)
+                                                   0.15      8.84 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1265/CO (FA1D0HPBWP)
+                                                   0.14      8.97 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1267/CO (FA1D0HPBWP)
+                                                   0.14      9.12 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/U_1270/CO (FA1D0HPBWP)
+                                                   0.14      9.25 r
+  gemm_array/mesh/RS_OP_4879_51114_65329_J1/DP_OP_5104_57861_60847_J0/ctmi_15669/ZN (XNR3D0HPBWP)
+                                                   0.26      9.52 r
+  gemm_array/mesh/ctmi_2887/Z (AO22D0HPBWP)        0.12      9.64 r
+  gemm_array/mesh/mesh_1_6/accumulation_reg_reg[31]/D (SDFCNQD2HPBWP)
+                                                   0.00      9.64 r
+  data arrival time                                          9.64
+
+  clock SYS_CLK (rise edge)                       10.00     10.00
+  clock network delay (ideal)                      0.02     10.02
+  gemm_array/mesh/mesh_1_6/accumulation_reg_reg[31]/CP (SDFCNQD2HPBWP)
+                                                   0.00     10.02 r
+  clock uncertainty                               -0.30      9.72
+  library setup time                              -0.08      9.64
+  data required time                                         9.64
+  ------------------------------------------------------------------------
+  data required time                                         9.64
+  data arrival time                                         -9.64
+  ------------------------------------------------------------------------
+  slack (MET)                                                0.00
+
+
+1
