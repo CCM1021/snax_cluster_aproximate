@@ -17,12 +17,24 @@ int main() {
     // Set err value for checking
     int err = 0;
 
-    // Prepare addresses in TCDM
+    // Prepare addresses pointers in TCDM for DMA
+    int8_t *local_a_dma, *local_b_dma;
+    int32_t *local_c_dma, *local_d32_dma;
+    int8_t *local_d8_dma;
+
+    // Allocate space in TCDM for DMA
+    local_a_dma = (int8_t *)(snrt_l1_next() + delta_physical_a);
+    local_b_dma = (int8_t *)(snrt_l1_next() + delta_physical_b);
+    local_c_dma = (int32_t *)(snrt_l1_next() + delta_physical_c);
+    local_d32_dma = (int32_t *)(snrt_l1_next() + delta_physical_d32);
+    local_d8_dma = (int8_t *)(snrt_l1_next() + delta_physical_d8);
+
+    // Prepare addresses pointers in TCDM for streamer
     int8_t *local_a, *local_b;
     int32_t *local_c, *local_d32;
     int8_t *local_d8;
 
-    // Allocate space in TCDM
+    // Allocate space in TCDM for streamer
     local_a = (int8_t *)(snrt_l1_next() + delta_local_a);
     local_b = (int8_t *)(snrt_l1_next() + delta_local_b);
     local_c = (int32_t *)(snrt_l1_next() + delta_local_c);
@@ -32,25 +44,33 @@ int main() {
     // Transfer data from L3 to L1
     // Using DMA only
     if (snrt_is_dm_core()) {
-#ifdef TEST_MATMUL
-        snrt_dma_start_1d(local_a, A,
-                          M * K * meshRow * tileSize * sizeof(int8_t));
-        snrt_dma_start_1d(local_b, B,
-                          N * K * tileSize * meshCol * sizeof(int8_t));
-#else
-        snrt_dma_start_1d(
-            local_a, A,
-            Nbatch * (H + 2 * pad_h) * (W + 2 * pad_w) * Cin * sizeof(int8_t));
-        snrt_dma_start_1d(local_b, B, Cout * Kh * Kw * Cin * sizeof(int8_t));
-#endif
+        if (interleaved_address == 1) {
+            snrt_dma_start_1d(local_a, A,
+                              Nbatch * (H + 2 * pad_h) * (W + 2 * pad_w) * Cin *
+                                  sizeof(int8_t));
+            snrt_dma_start_1d(local_b, B,
+                              Cout * Kh * Kw * Cin * sizeof(int8_t));
+        } else {
+            snrt_dma_start_2d(
+                local_a_dma, A, 64 * sizeof(int8_t), 256, 64,
+                Nbatch * (H + 2 * pad_h) * (W + 2 * pad_w) * Cin / 64);
+            snrt_dma_start_2d(local_b_dma, B, 64 * sizeof(int8_t), 256, 64,
+                              Cout * Kh * Kw * Cin / 64);
+        }
         snrt_dma_wait_all();
     }
 
     // Wait for DMA to finish
     snrt_cluster_hw_barrier();
     if (snrt_is_dm_core()) {
-        snrt_dma_start_1d(local_c, C,
-                          M * N * meshRow * meshCol * sizeof(int32_t));
+        if (interleaved_address == 1) {
+            snrt_dma_start_1d(local_c, C,
+                              M * N * meshRow * meshCol * sizeof(int32_t));
+        } else {
+            snrt_dma_start_2d(local_c_dma, C, 16 * sizeof(int32_t), 256,
+                              16 * sizeof(int32_t),
+                              M * N * meshRow * meshCol / 16);
+        }
         snrt_dma_wait_all();
     }
 
@@ -61,23 +81,23 @@ int main() {
         set_gemmx_streamer_csr(
             Aslstride0, Aslstride1, Atlbound0, Atlstride0, Atlbound1,
             Atlstride1, Atlbound2, Atlstride2, Atlbound3, Atlstride3, Atlbound4,
-            Atlstride4, Atlbound5, Atlstride5,
+            Atlstride4, Atlbound5, Atlstride5, set_addr_remap_index_A,
 
             Bslstride0, Bslstride1, Btlbound0, Btlstride0, Btlbound1,
-            Btlstride1, Btlbound2, Btlstride2,
+            Btlstride1, Btlbound2, Btlstride2, set_addr_remap_index_B,
 
             D8slstride0, D8slstride1, D8tlbound0, D8tlstride0, D8tlbound1,
-            D8tlstride1, D8tlbound2, D8tlstride2,
+            D8tlstride1, D8tlbound2, D8tlstride2, set_addr_remap_index_D8,
 
             Cslstride0, Cslstride1, Ctlbound0, Ctlstride0, Ctlbound1,
-            Ctlstride1, Ctlbound2, Ctlstride2,
+            Ctlstride1, Ctlbound2, Ctlstride2, set_addr_remap_index_C,
 
             D32slstride0, D32slstride1, D32tlbound0, D32tlstride0, D32tlbound1,
-            D32tlstride1, D32tlbound2, D32tlstride2,
+            D32tlstride1, D32tlbound2, D32tlstride2, set_addr_remap_index_D32,
 
             delta_local_a, delta_local_b, delta_local_d8, delta_local_c,
             delta_local_d32, bypassSIMD, transposed_A, transposed_B,
-            channel_en_C);
+            channel_en_C, broadcast_C);
 
         // Set GEMMX configuration CSR
         uint32_t subtraction_setting =
@@ -104,18 +124,25 @@ int main() {
         wait_gemmx_and_streamer();
 
         // check the result of the implicit im2col convolution
-        if (!bypassSIMD) {
-            err += check_gemmx_result_D8(local_d8, D8, Batch, M, N);
+        if (interleaved_address == 1) {
+            if (!bypassSIMD) {
+                err += check_gemmx_result_D8(local_d8, D8, Batch, M, N, false);
+            } else {
+                err +=
+                    check_gemmx_result_D32(local_d32, D32, Batch, M, N, false);
+            }
         } else {
-            err += check_gemmx_result_D32(local_d32, D32, Batch, M, N);
+            if (!bypassSIMD) {
+                err +=
+                    check_gemmx_result_D8(local_d8_dma, D8, Batch, M, N, true);
+            } else {
+                err += check_gemmx_result_D32(local_d32_dma, D32, Batch, M, N,
+                                              true);
+            }
         }
-#ifdef TEST_MATMUL
-        printf("SNAX GEMM Matmul: %s, Error: %d . bypassSIMD = %d .\n",
-               err ? "FAIL" : "PASS", err, bypassSIMD);
-#else
+
         printf("SNAX GEMM Conv2d: %s, Error: %d . bypassSIMD = %d .\n",
                err ? "FAIL" : "PASS", err, bypassSIMD);
-#endif
     };
 
     return err;

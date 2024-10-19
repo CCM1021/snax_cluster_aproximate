@@ -40,7 +40,7 @@ class Writer(
       inputWidth = param.tcdmParam.dataWidth * param.tcdmParam.numChannel,
       outputWidth = param.tcdmParam.dataWidth,
       depth = param.bufferDepth,
-      pipe = true
+      pipe = false
     ) {
       override val desiredName = s"${moduleNamePrefix}_Writer_DataBuffer"
     }
@@ -89,7 +89,19 @@ class Writer(
   }
 
   // DataBuffer <> Input
-  dataBuffer.io.in.head <> io.data
+  if (param.crossClockDomain == false) { dataBuffer.io.in.head <> io.data }
+  else {
+    val clockDomainCrosser = Module(
+      new AsyncQueue(chiselTypeOf(dataBuffer.io.in.head.bits)) {
+        override val desiredName =
+          s"${moduleNamePrefix}_Writer_ClockDomainCrosser"
+      }
+    )
+    clockDomainCrosser.io.enq.clock := io.accClock.get
+    clockDomainCrosser.io.deq.clock := clock
+    clockDomainCrosser.io.enq.data <> io.data
+    dataBuffer.io.in.head <> clockDomainCrosser.io.deq.data
+  }
   // Busy Signal
   io.busy := addressgen.io.busy | (~addressgen.io.bufferEmpty)
 
