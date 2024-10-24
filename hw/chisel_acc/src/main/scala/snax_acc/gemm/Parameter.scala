@@ -3,18 +3,18 @@ import chisel3._
 import chisel3.util._
 
 case class GemmParams(
-    dataWidthA: Int,
-    dataWidthB: Int,
-    dataWidthMul: Int,
-    dataWidthC: Int,
-    dataWidthAccum: Int,
-    subtractionCfgWidth: Int,
-    meshRow: Int,
-    tileSize: Int,
-    meshCol: Int,
-    addrWidth: Int,
-    sizeConfigWidth: Int
-)
+                       dataWidthA: Int,
+                       dataWidthB: Int,
+                       dataWidthMul: Int,
+                       dataWidthC: Int,
+                       dataWidthAccum: Int,
+                       subtractionCfgWidth: Int,
+                       meshRow: Int,
+                       tileSize: Int,
+                       meshCol: Int,
+                       addrWidth: Int,
+                       sizeConfigWidth: Int
+                     )
 
 object GemmConstant {
 
