@@ -10,16 +10,17 @@
     },
 
     cluster: {
-        name: "snax_mac_mult_cluster",
-        bender_target: ["snax_mac_mult_cluster"],
+        name: "snax_KUL_cluster",
+        bender_target: ["snax_KUL_cluster"],
         boot_addr: 4096, // 0x1000
         cluster_base_addr: 268435456, // 0x1000_0000
-        cluster_base_offset: 262144,  // 256KB
+        cluster_base_offset: 4194304,  // 4MB
         cluster_base_hartid: 0,
         addr_width: 48,
         data_width: 64,
+        user_width: 3,
         tcdm: {
-            size: 4096,
+            size: 128,
             banks: 32,
         },
         cluster_periph_size: 64, // kB
@@ -46,6 +47,16 @@
             emaw: 2,
             emas: 1
         },
+        snax_custom_tcdm_assign: {
+            snax_enable_assign_tcdm_idx: true,
+            snax_narrow_assign_start_idx: [0,56],
+            snax_narrow_assign_end_idx: [7,71],
+            snax_wide_assign_start_idx: [8],
+            snax_wide_assign_end_idx: [55],
+        },
+        // AXI bandwidth switcher
+        use_ax_bw_converter: true,
+        converted_axi_bandwidth: 256,
         // Timing parameters
         timing: {
             lat_comp_fp32: 3,
@@ -77,7 +88,8 @@
                     cacheline: 256 // word size in bits
                 },
                 cores: [
-                    { $ref: "#/snax_mac_mult_template" },
+                    { $ref: "#/snax_streamer_gemmX_core_template" },
+                    { $ref: "#/snax_data_reshuffler_core_template" },
                     { $ref: "#/dma_core_template" },
                 ]
             }
@@ -98,7 +110,7 @@
         },
     },
     // Templates.
-    snax_mac_mult_template: {
+    snax_streamer_gemmX_core_template: {
         isa: "rv32ima",
         xssr: false,
         xfrep: false,
@@ -110,13 +122,19 @@
         xfdotp: false,
         xfvec: false,
         snax_acc_cfg: {
-            snax_acc_name: "snax_mac",
-            bender_target: ["snax_mac"],
-            snax_narrow_tcdm_ports: 4,
-            snax_num_rw_csr: 24,
-            snax_num_acc: 4,
+            snax_acc_name: "snax_streamer_gemmX",
+            bender_target: ["snax_gemmX","snax_data_reshuffler"],
+            snax_narrow_tcdm_ports: 8,
+            snax_wide_tcdm_ports: 48,
+            snax_num_rw_csr: 19,
+            snax_num_ro_csr: 2,
+            snax_gemmx_mesh_row: 8,
+            snax_gemmx_tile_size: 8,
+            snax_gemmx_mesh_col: 8,
+            with_pipeline: false,
+            snax_streamer_cfg: {$ref: "#/snax_streamer_gemmX_streamer_template" }
         },
-        snax_use_custom_ports: true,
+        snax_use_custom_ports: false,
         num_int_outstanding_loads: 1,
         num_int_outstanding_mem: 4,
         num_fp_outstanding_loads: 4,
@@ -127,7 +145,8 @@
         // Enable division/square root unit
         // Xdiv_sqrt: true,
     },
-    snax_mac_single_template: {
+    // Templates.
+    snax_data_reshuffler_core_template: {
         isa: "rv32ima",
         xssr: false,
         xfrep: false,
@@ -138,12 +157,14 @@
         xf8alt: false,
         xfdotp: false,
         xfvec: false,
-        snax_acc_set: {
-            snax_module: "snax_mac_wrapper",
-            snax_num_csr: 24,
-            snax_num_acc: 1,
-            snax_tcdm_ports: 4,
+        snax_acc_cfg: {
+            snax_acc_name: "snax_data_reshuffler",
+            snax_narrow_tcdm_ports: 16,
+            snax_num_rw_csr: 2,
+            snax_num_ro_csr: 2,
+            snax_streamer_cfg: {$ref: "#/snax_data_reshuffler_streamer_template" }
         },
+        snax_use_custom_ports: false,
         num_int_outstanding_loads: 1,
         num_int_outstanding_mem: 4,
         num_fp_outstanding_loads: 4,
@@ -174,5 +195,61 @@
         num_sequencer_instructions: 16,
         num_dtlb_entries: 1,
         num_itlb_entries: 1,
+    },
+    // SNAX Streamer Templates
+    snax_streamer_gemmX_streamer_template :{
+
+        data_reader_params: {
+            spatial_bounds: [[8], [8]],
+            temporal_dim: [6, 3],
+            num_channel: [8, 8],
+            fifo_depth: [8, 8],
+            configurable_channel: [0, 0],
+            tcdm_logic_word_size: [[256, 128, 64], [256, 128, 64]],
+        },
+
+        data_writer_params:{
+            spatial_bounds: [[8]],
+            temporal_dim: [3],
+            num_channel: [8],
+            fifo_depth: [8],
+            configurable_channel: [0],
+            tcdm_logic_word_size: [[256, 128, 64]],
+        },
+
+        data_reader_writer_params:{
+            spatial_bounds: [[8, 4], [8, 4]],
+            temporal_dim: [3, 3],
+            num_channel: [32, 32],
+            fifo_depth: [2, 2],
+            configurable_channel: [1, 0],
+            tcdm_logic_word_size: [[256, 128, 64], [256, 128, 64]],
+        },
+
+        has_transpose: true,
+
+        has_C_broadcast: true,
+
+        snax_library_name: "gemmx",
+    },
+    // SNAX Streamer Templates
+    snax_data_reshuffler_streamer_template :{
+
+        data_reader_params: {
+            spatial_bounds: [[8]],
+            temporal_dim: [5],
+            num_channel: [8],
+            fifo_depth: [2],
+        },
+
+        data_writer_params:{
+            spatial_bounds: [[8]],
+            temporal_dim: [3],
+            num_channel: [8],
+            fifo_depth: [2],
+        },
+
+        snax_library_name: "data-reshuffler",
+
     }
 }

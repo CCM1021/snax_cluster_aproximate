@@ -10,23 +10,23 @@
     },
 
     cluster: {
-        name: "snax_alu_cluster",
-        bender_target: ["snax_alu_cluster"],
+        name: "snax_cgra_cluster",
+        bender_target: ["snax_cgra_cluster"],
         boot_addr: 4096, // 0x1000
         cluster_base_addr: 268435456, // 0x1000_0000
-        cluster_base_offset: 262144,  // 256KB
+        cluster_base_offset: 4194304,  // 4MB
         cluster_base_hartid: 0,
         addr_width: 48,
         data_width: 64,
         tcdm: {
-            size: 4096,
+            size: 128,
             banks: 32,
         },
         cluster_periph_size: 64, // kB
         zero_mem_size: 64, // kB
         dma_data_width: 512,
-        dma_axi_req_fifo_depth: 16,
-        dma_req_fifo_depth: 8,
+        dma_axi_req_fifo_depth: 3,
+        dma_req_fifo_depth: 3,
 
         // Observable pins parameter
         observable_pin_width: 8,
@@ -78,7 +78,7 @@
                     cacheline: 256 // word size in bits
                 },
                 cores: [
-                    { $ref: "#/snax_alu_core_template" },
+                    { $ref: "#/snax_cgra_core_template" },
                     { $ref: "#/dma_core_template" },
                 ]
             }
@@ -99,7 +99,7 @@
         },
     },
     // SNAX Accelerator Core Templates
-    snax_alu_core_template: {
+    snax_cgra_core_template: {
         isa: "rv32ima",
         xssr: false,
         xfrep: false,
@@ -111,12 +111,12 @@
         xfdotp: false,
         xfvec: false,
         snax_acc_cfg: {
-            snax_acc_name: "snax_alu",
-            bender_target: ["snax_alu"],
-            snax_narrow_tcdm_ports: 12,
-            snax_num_rw_csr: 3,
-            snax_num_ro_csr: 2,
-            snax_streamer_cfg: {$ref: "#/snax_alu_streamer_template" }
+            snax_acc_name: "snax_cgra",
+            bender_target: ["cgra"],
+            snax_narrow_tcdm_ports: 16,
+            snax_num_rw_csr: 1,
+            snax_num_ro_csr: 4,
+            snax_streamer_cfg: {$ref: "#/snax_cgra_streamer_template" }
         },
         snax_use_custom_ports: false,
         num_int_outstanding_loads: 1,
@@ -151,22 +151,22 @@
         num_itlb_entries: 1,
     }
     // SNAX Streamer Templates
-    snax_alu_streamer_template :{
+    snax_cgra_streamer_template :{
 
         data_reader_params: {
-            spatial_bounds: [[4], [4]],
-            temporal_dim: [1, 1],
-            num_channel: [4, 4],
-            fifo_depth: [8, 8],
+            spatial_bounds: [[1], [1], [1], [1], [1], [1], [1], [1]],
+            temporal_dim: [2, 2, 2, 2, 2, 2, 2, 2],
+            num_channel: [1, 1, 1, 1, 1, 1, 1, 1],
+            fifo_depth: [8, 8, 8, 8, 8, 8, 8, 8],
         },
 
-        data_writer_params:{
-            spatial_bounds: [[4]],
-            temporal_dim: [1],
-            num_channel: [4],
-            fifo_depth: [8],
+        data_writer_params: {
+            spatial_bounds: [[1], [1], [1], [1], [1], [1], [1], [1]],
+            temporal_dim: [2, 2, 2, 2, 2, 2, 2, 2],
+            num_channel: [1, 1, 1, 1, 1, 1, 1, 1],
+            fifo_depth: [8, 8, 8, 8, 8, 8, 8, 8],
         },
 
-        snax_library_name: "snax-alu",
+        snax_library_name: "snax-cgra",
     }
 }
