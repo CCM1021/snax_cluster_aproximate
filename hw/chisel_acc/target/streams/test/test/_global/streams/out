@@ -1,8 +1,8 @@
-[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(BlockGemmTest, org.scalatest.tools.Framework$$anon$1@5e336e67, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(BlockGemmTest, org.scalatest.tools.Framework$$anon$1@36819aac, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mBlockGemmTest:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mBlockGemm[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should process input data correctly with 2x2 matrix[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 29 seconds, 557 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 38 seconds, 210 milliseconds.[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 1[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 1, aborted 0[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0[0m[0m

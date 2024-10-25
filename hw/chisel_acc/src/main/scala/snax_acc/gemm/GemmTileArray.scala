@@ -86,8 +86,8 @@ class Tile(params: GemmParams) extends Module with RequireAsyncReset {
   // Element-wise multiply
 
   // Definir los desplazamientos en enteros y luego convertirlos a UInt
-  val desp_a = (io.data_a_i.head.getWidth / 2).U// Obtener la anchura de un dato y dividirla entre 2, luego convertir a UInt
-  val desp_b = (io.data_b_i.head.getWidth / 2).U // Mismo proceso para data_b
+  val desp_a = (2).U// Obtener la anchura de un dato y dividirla entre 2, luego convertir a UInt
+  val desp_b = (2).U // Mismo proceso para data_b
 
 
   for (i <- 0 until params.tileSize) {
@@ -99,8 +99,9 @@ class Tile(params: GemmParams) extends Module with RequireAsyncReset {
     val mul_result = data_a_approx * data_b_approx
 
     // Devolver lo que se desplazó, pero con el doble del desplazamiento a la izquierda
-    mul_add_result_vec(i) := (mul_result).asSInt // O desp_b si prefieres  }
-
+    mul_add_result_vec(i) := (mul_result << (2.U * desp_a)).asSInt // O desp_b si prefieres  }
+    // Imprimir los resultados
+    //printf(p"Iteration $i: data_a_approx = ${data_a_approx}, data_b_approx = ${data_b_approx}, mul_result = ${mul_result}, mul_add_result = ${mul_add_result_vec(i)}\n")
   }
 
   // Sum of element-wise multiply
