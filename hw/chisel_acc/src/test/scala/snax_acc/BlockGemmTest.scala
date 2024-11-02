@@ -3,106 +3,120 @@ import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 import snax_acc.gemm.{BlockGemm, DefaultConfig}
 import scala.util.Random
+import scala.concurrent.duration._
+import java.io._
 
 class BlockGemmTest extends AnyFlatSpec with ChiselScalatestTester {
-  "BlockGemm" should "process input data correctly with 2x2 matrix" in {
-    test(new BlockGemm(DefaultConfig.gemmConfig)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
-      val num_mat: Int = 4 // Usar 2x2 matriz para el test
+  "BlockGemm" should "process input data correctly with 2x2 matrix for 1000 random cases" in {
+    // Crea o abre el archivo CSV para escribir los resultados
+    val writer = new PrintWriter(new File("test_results.csv"))
+    // Escribe la cabecera del CSV
+    writer.write("TestNumber,ElapsedTime(ms),Error(%),Cycles\n")
+    var cycles: BigInt = 0
+    // Generar 1000 pruebas con diferentes datos aleatorios
+    for (testNum <- 1 to 100) { // Cambia a 1000 si es necesario
+      test(new BlockGemm(DefaultConfig.gemmConfig)) { dut =>
+        val numMat: Int = 8
+        val random = new Random()
 
-      // Configurar parámetros del control
-      dut.io.ctrl.bits.M_i.poke(num_mat.U)
-      dut.io.ctrl.bits.K_i.poke(num_mat.U)
-      dut.io.ctrl.bits.N_i.poke(num_mat.U)
-      dut.io.ctrl.bits.subtraction_constant_i.poke(0.U)
 
-      // Habilitar ctrl.valid y avanzar el reloj por unos ciclos fijos
-      dut.io.ctrl.valid.poke(true.B)
-      dut.clock.step(5)  // Esperar algunos ciclos para que el DUT procese el control
-      dut.io.ctrl.valid.poke(false.B)
+        println(s"Prueba #$testNum")
 
-      // Generar matrices aleatorias
-      val random = new Random(21)
-      val maxValue = (1 << num_mat) - 1 // Ancho de bits para num_mat
-      val matrixA = Array.fill(num_mat, num_mat)(random.nextInt(maxValue).U(num_mat.W))
-      val matrixB = Array.fill(num_mat, num_mat)(random.nextInt(maxValue).U(num_mat.W))
-      val matrixC = Array.fill(num_mat, num_mat)(0.U(num_mat.W)) // Inicializar matrixC en 0
+        // Configurar parámetros de control constantes
+        dut.io.ctrl.bits.M_i.poke(numMat.U)
+        dut.io.ctrl.bits.K_i.poke(numMat.U)
+        dut.io.ctrl.bits.N_i.poke(numMat.U)
+        dut.io.ctrl.bits.subtraction_constant_i.poke(0.U)
 
-      // Mostrar matrices generadas
-      println(s"Matrix A (input a_i): ${matrixA.map(_.mkString(", ")).mkString("\n")}")
-      println(s"Matrix B (input b_i): ${matrixB.map(_.mkString(", ")).mkString("\n")}")
-      println(s"Matrix C (input c_i): ${matrixC.map(_.mkString(", ")).mkString("\n")}")
+        // Generar matrices aleatorias para cada prueba
+        val maxValue = (1 << numMat) - 1
+        val matrixA = Array.fill(numMat)(random.nextInt(maxValue).U(numMat.W))
+        val matrixB = Array.fill(numMat)(random.nextInt(maxValue).U(numMat.W))
+        val matrixC = Array.fill(numMat)(0.U(numMat.W))
 
-      // Calcular el resultado esperado
-      val expectedMatrix = Array.ofDim[BigInt](num_mat, num_mat)
-      for (i <- 0 until num_mat) {
-        for (j <- 0 until num_mat) {
-          expectedMatrix(i)(j) = (0 until num_mat).map(k => matrixA(i)(k).litValue * matrixB(k)(j).litValue).sum + matrixC(i)(j).litValue
+        println(s"Matrix A: ${matrixA.map(_.litValue).mkString(", ")}")
+        println(s"Matrix B: ${matrixB.map(_.litValue).mkString(", ")}")
+        println(s"Matrix C: ${matrixC.map(_.litValue).mkString(", ")}")
+
+        // Calcular el resultado esperado en Scala usando los valores generados
+        var expectedSum: BigInt = 0
+        for (i <- 0 until numMat) {
+          val aValue = matrixA(i).litValue
+          val bValue = matrixB(i).litValue
+          expectedSum += (aValue * bValue) + matrixC(i).litValue
         }
-      }
 
-      // Proveer datos de entrada sin depender de ready
-      dut.io.data.a_i.valid.poke(true.B)
-      dut.io.data.b_i.valid.poke(true.B)
-      dut.io.data.c_i.valid.poke(true.B)
+        // Enviar los valores de entrada al DUT
+        dut.io.ctrl.valid.poke(true.B)
+        dut.clock.step(1)
+        dut.io.ctrl.valid.poke(false.B)
 
-      // Enviar matrices completas fila por fila
-      for (i <- 0 until num_mat) {
-        // Enviar cada elemento de la fila
-        for (j <- 0 until num_mat) {
-          // Esperar a que el DUT esté listo para recibir datos
-          while (dut.io.data.a_i.ready.peek().litToBoolean) {
-            dut.clock.step(1) // Esperar hasta que esté listo
-          }
-          dut.io.data.a_i.bits.poke(matrixA(i)(j)) // Enviar cada elemento de A
+        dut.io.data.a_i.valid.poke(true.B)
+        dut.io.data.b_i.valid.poke(true.B)
+        dut.io.data.c_i.valid.poke(true.B)
 
-          // Repetir para B y C
-          while (dut.io.data.b_i.ready.peek().litToBoolean) {
-            dut.clock.step(1)
-          }
-          dut.io.data.b_i.bits.poke(matrixB(i)(j)) // Enviar cada elemento de B
+        // Medir el tiempo de envío
+        val startTime = System.nanoTime()
 
-          while (dut.io.data.c_i.ready.peek().litToBoolean) {
-            dut.clock.step(1)
-          }
-          dut.io.data.c_i.bits.poke(matrixC(i)(j)) // Enviar cada elemento de C
-
-          dut.clock.step(1) // Avanzar un ciclo de reloj para procesar la fila completa
-        }
-      }
-
-      // Esperar para que el módulo procese los datos
-      dut.clock.step(10)
-
-      // Verificar salida
-      dut.io.data.d_o.ready.poke(true.B)
-      val outputMatrix = Array.ofDim[BigInt](num_mat, num_mat)
-
-      for (i <- 0 until num_mat) {
-        var cycles = 0
-        while (!dut.io.data.d_o.valid.peek().litToBoolean && cycles < 60) {
-          println(s"Esperando por salida en posición ($i)... ciclo $cycles")
+        for (i <- 0 until numMat) {
+          dut.io.data.a_i.bits.poke(matrixA(i))
+          dut.io.data.b_i.bits.poke(matrixB(i))
+          dut.io.data.c_i.bits.poke(matrixC(i))
           dut.clock.step(1)
-          cycles += 1
         }
-        if (dut.io.data.d_o.valid.peek().litToBoolean) {
-          for (j <- 0 until num_mat) {
-            // Esperar a que el DUT esté listo para enviar la salida
-            while (!dut.io.data.d_o.ready.peek().litToBoolean) {
-              dut.clock.step(1) // Esperar hasta que esté listo
-            }
-            outputMatrix(i)(j) = dut.io.data.d_o.bits.peek().litValue
-            println(s"Salida recibida en posición ($i, $j): ${outputMatrix(i)(j)}")
-            dut.clock.step(1) // Asegurarse de que avanza para recibir la siguiente fila
-          }
+
+        // Desactivar las entradas para finalizar la carga de datos
+        dut.io.data.a_i.valid.poke(false.B)
+        dut.io.data.b_i.valid.poke(false.B)
+        dut.io.data.c_i.valid.poke(false.B)
+
+        // Espera hasta que se reciba una salida válida
+        var cycleCount = 0
+        var outputValid = false
+        while (!outputValid && cycleCount < 100) { // Limitar a 100 ciclos para evitar bucles infinitos
+          dut.clock.step(1)
+          outputValid = dut.io.data.d_o.valid.peek().litToBoolean
+          cycleCount += 1
+        }
+
+        // Medir el tiempo de recepción
+        val endTime = System.nanoTime()
+        val elapsedTime = (endTime - startTime).nanos.toMillis
+
+        // Inicializa error
+
+
+        if (outputValid) {
+          val output = dut.io.data.d_o.bits.peek().litValue
+          val error = (output - expectedSum).abs
+
+
+          // Imprimir resultados y errores
+          println(s"Output D: $output")
+          println(s"Resultado esperado: $expectedSum")
+          println(f"Error de aproximación: $error")
+          println(s"Total de ciclos de reloj: $cycleCount")
+          println(s"Performance Counter: $cycles")
+          // Guardar los resultados en el CSV
+          writer.write(s"$testNum,$elapsedTime,$error,$cycles\n")
+
+          // Verificar si el error es aceptable
+          //assert(error < 1, s"Error de aproximación mayor al permitido en la prueba #$testNum: $error%")
         } else {
-          println(s"No se recibió la salida para la posición ($i) después de $cycles ciclos.")
+          println(s"Error: No se recibió salida válida después de $cycleCount ciclos en prueba #$testNum")
         }
+
+
+
+        dut.clock.step(5) // Ciclo de espera después del reset
+        cycles =  {dut.io.performance_counter.peek().litValue}
+
       }
 
-      // Mostrar la matriz de salida y la matriz esperada
-      println(s"Expected Matrix: ${expectedMatrix.map(_.mkString(", ")).mkString("\n")}")
-      println(s"Output Matrix: ${outputMatrix.map(_.mkString(", ")).mkString("\n")}")
-      println("Test completado")
     }
+
+    // Cerrar el archivo CSV
+
+    writer.close()
   }
 }

@@ -18,7 +18,7 @@ case class GemmParams(
 
 object GemmConstant {
 
-  def dataWidthA = 8
+  def dataWidthA = 32
   def dataWidthB = dataWidthA
   def dataWidthMul = dataWidthA * 4
   def dataWidthC = dataWidthA * 4

@@ -38,6 +38,7 @@ class TileIO(params: GemmParams) extends Bundle {
 // Tile implementation, do a vector dot product of two vector
 // !!! When dotprod_a_b and a_b_c_ready_o assert, do the computation, and give the result next cycle, with a d_valid_o assert
 class Tile(params: GemmParams) extends Module with RequireAsyncReset {
+
   val io = IO(new TileIO(params))
 
   val accumulation_reg = RegInit(0.S(params.dataWidthAccum.W))
@@ -83,12 +84,10 @@ class Tile(params: GemmParams) extends Module with RequireAsyncReset {
       .asSInt -& io.ctrl.subtraction_b_i.asSInt).asSInt
   }
 
-  // Element-wise multiply
-
+  ///////////////////////////Start the aproximation////////////////
   // Definir los desplazamientos en enteros y luego convertirlos a UInt
-  val desp_a = (2).U// Obtener la anchura de un dato y dividirla entre 2, luego convertir a UInt
-  val desp_b = (2).U // Mismo proceso para data_b
-
+  val desp_a = (1).U// Obtener la anchura de un dato y dividirla entre 2, luego convertir a UInt
+  val desp_b = (1).U // Mismo proceso para data_b
 
   for (i <- 0 until params.tileSize) {
     // Desplazar a la derecha para conservar solo los bits más significativos
@@ -98,10 +97,11 @@ class Tile(params: GemmParams) extends Module with RequireAsyncReset {
     // Multiplicar los valores aproximados
     val mul_result = data_a_approx * data_b_approx
 
+
     // Devolver lo que se desplazó, pero con el doble del desplazamiento a la izquierda
-    mul_add_result_vec(i) := (mul_result << (2.U * desp_a)).asSInt // O desp_b si prefieres  }
-    // Imprimir los resultados
-    //printf(p"Iteration $i: data_a_approx = ${data_a_approx}, data_b_approx = ${data_b_approx}, mul_result = ${mul_result}, mul_add_result = ${mul_add_result_vec(i)}\n")
+    //mul_add_result_vec(i) := (mul_result << (2.U * desp_a)).asSInt
+    mul_add_result_vec(i) := mul_result.asSInt
+
   }
 
   // Sum of element-wise multiply

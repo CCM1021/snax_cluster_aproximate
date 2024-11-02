@@ -105,10 +105,7 @@ class BlockGemm(params: GemmParams) extends Module with RequireAsyncReset {
   def a_bits_len = params.meshRow * params.tileSize * params.dataWidthA
   def b_bits_len = params.tileSize * params.meshCol * params.dataWidthB
   def a_b_bits_len = a_bits_len + b_bits_len
-  // Agregar printf dentro de la lógica donde se procesan las señales
-  when(io.ctrl.fire) {
-    printf(p"M_i: ${io.ctrl.bits.M_i}, N_i: ${io.ctrl.bits.N_i}, K_i: ${io.ctrl.bits.K_i}, Subtraction Constant: ${io.ctrl.bits.subtraction_constant_i}\n")
-  }
+
   val combined_decoupled_a_b_in = Wire(Decoupled(UInt(a_b_bits_len.W)))
   val combined_decoupled_a_b_out = Wire(Decoupled(UInt(a_b_bits_len.W)))
   val a_split_out = Wire(UInt(a_bits_len.W))
@@ -138,7 +135,7 @@ class BlockGemm(params: GemmParams) extends Module with RequireAsyncReset {
 
   // Changing states
   cstate := nstate
-
+  println(cstate)
   chisel3.dontTouch(cstate)
   switch(cstate) {
     is(sIDLE) {
@@ -285,7 +282,6 @@ class BlockGemm(params: GemmParams) extends Module with RequireAsyncReset {
 
   // gemm output signals
   io.data.d_o.bits := gemm_array.io.data.d_o
-
   // after K + 1 times accumulation, the output is valid
   io.data.d_o.valid := (d_output_ifvalid_counter === K) && gemm_array.io.ctrl.d_valid_o && cstate =/= sIDLE
 
